@@ -1,0 +1,37 @@
+<%- include("header") -%>
+
+<div class="row">
+<div class="col-md-3">
+</div>
+<div class="col-md-6">
+<div class="box" id="heading">
+<h1> <%=listTitle%> </h1>
+</div>
+</div>
+
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+  </div>
+<div class="col-md-6">
+<div class="box">
+<% listdata.forEach(function(item){ %>
+<form action="/delete" method="post">
+<div class="item">
+
+<p class="todo"><%=  item  %></p>
+
+</div>
+
+
+</form>
+<% }); %>
+
+
+</div>
+</div>
+</div>
+
+
+<%- include("footer") -%>
