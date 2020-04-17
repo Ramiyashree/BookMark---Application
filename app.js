@@ -128,11 +128,17 @@ app.post("/createTag",function(req,res){
           }
           else{
             List.find({"items.name":itemName}, function(err,lists){ //IF THE TAG IS ALREADY EXISTING WE CHECK WHETHER THS BOOKMARK IS ALREADY PRESENT TO AVOID DUPLICATE COPY
-              if(lists.length == 0){
+              if(!err)
+              {    if(lists.length == 0){
+                  Item.findOne({name:itemName}, function(err,lists){
+                if(!lists){
                 foundList.items.push(item);
                 foundList.save();
               }
             });
+        }
+      }
+    });
           }
         }
         else{
