@@ -12,9 +12,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-//mongoose.connect("mongodb://localhost:27017/bookmarkintern", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/bookmarkintern", {useNewUrlParser: true});
 
-mongoose.connect("mongodb+srv://admin-ramiya:Test123@cluster0-xdeqa.mongodb.net/bookmarkintern", {useNewUrlParser: true});
+//mongoose.connect("mongodb+srv://admin-ramiya:Test123@cluster0-xdeqa.mongodb.net/bookmarkintern", {useNewUrlParser: true});
 
 const itemsSchema = {
   name: String
@@ -104,9 +104,13 @@ app.post("/createTag",function(req,res){
     Item.findOne({name:itemName}, function(err,lists){
       if(!err){
         if(!lists){
+          List.find({"items.name":itemName}, function(err,listsname){
+              if(listsname.length==0){
           item.save();
         }
+      });
       }
+    }
       res.redirect("/");
     });
   }
@@ -208,7 +212,7 @@ app.post("/delete",function(req, res){
   }
 });
 
-app.post("/deleteTag",function(req, res){ //REMOVING A TAG
+app.post("/deleteTag",function(req, res){ //REMOVING A
   const checkedItemId = req.body.checkbox;
   const listName = req.body.listName;
   List.deleteOne(
