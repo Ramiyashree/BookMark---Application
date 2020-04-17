@@ -12,9 +12,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/bookmarkintern", {useNewUrlParser: true});
+//mongoose.connect("mongodb://localhost:27017/bookmarkintern", {useNewUrlParser: true});
 
-//mongoose.connect("mongodb+srv://admin-ramiya:Test123@cluster0-xdeqa.mongodb.net/bookmarkintern", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-ramiya:Test123@cluster0-xdeqa.mongodb.net/bookmarkintern", {useNewUrlParser: true});
 
 const itemsSchema = {
   name: String
