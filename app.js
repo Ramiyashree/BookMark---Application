@@ -17,6 +17,10 @@ app.use(express.static("public"));
 
 mongoose.connect("mongodb://localhost:27017/bookmarkintern", {useNewUrlParser: true});
 
+//mongoose.connect("mongodb+srv://admin-ramiya:Test123@cluster0-xdeqa.mongodb.net/bookmarkintern", {useNewUrlParser: true});
+
+
+
 
 const itemsSchema = {
   name: String
@@ -26,19 +30,19 @@ const Item = mongoose.model("Item",itemsSchema);
 
 const item1 = new Item ({
 
- name: "Welcome to your Todo List"
+ name: "https://www.nytimes.com/2020/04/14/us/politics/trump-total-authority-claim.html"
 
 });
 
 const item2 = new Item ({
 
- name: "Hit the + button to add an item."
+ name: "https://www.google.com/"
 
 });
 
 const item3 = new Item ({
 
- name: "<-- Hit this to delete an item."
+ name: "https://robbishop.house.gov/media/press-releases/house-members-take-cause-liberty"
 
 });
 
@@ -114,34 +118,6 @@ app.get("/:customListName", function(req, res){
 });
 
 
-//Creating a folder to create a add the bookmarks to it
-app.post("/createList",function(req,res){
-
-  const name = req.body.newList;
-  console.log(name);
-   List.findOne({name: name} , function(err, foundList){
-   if(!err){
-     if(!foundList){
-       const list = new List({
-
-        name: name,
-      });
-
-       list.save();
-
-         res.redirect("/"+ name);
-     }
-     else{
-
-      res.redirect("/"+name);
-    }
-  }
-  else{
-    console.log(err)
-  }
-});
-
-});
 
 
 //Creating the tags to add bookmarks to it
@@ -153,7 +129,19 @@ var count = 0;
 
 
   var tagName = req.body.newTag;
+  if(tagName.length == 0)
+  {
+  const item = new Item({
+    name: itemName
+  });
+
+      item.save();
+
+      res.redirect("/");
+
       console.log(tagName);
+    }
+    else{
   var string = tagName.split(",");
       console.log(string);
   string.forEach(elements => {
@@ -177,8 +165,10 @@ var count = 0;
 
 
               list.items.push(item);
-              list.save();
+                  list.save();
               console.log("found it");
+              // res.redirect("/");
+
 
 
    }
@@ -193,8 +183,11 @@ var count = 0;
 
 
                        foundList.items.push(item);
+
+                           foundList.save();
                        foundList.save();
                        console.log("found it");
+
 
                }
 
@@ -202,6 +195,7 @@ var count = 0;
             });
 
     }
+    // res.redirect("/");
   }
   else{
     console.log(err)
@@ -213,19 +207,24 @@ res.redirect("/");
 
 
 
-
+}
 });
+
 
 
 //Retriving all bookmarks
 app.post("/getAllBookmarks",function(req,res){
 List.find({},function(err,lists){
+      Item.find({}, function(err,items){
   var itemsName = [];
   if(err)
   {
     console.log(err);
   }
   else{
+    items.forEach(function(item){
+      itemsName.push(item.name);
+    });
 
     lists.forEach(function(list){
       list.items.forEach(function(name){
@@ -234,10 +233,12 @@ List.find({},function(err,lists){
 
       });
   });
+
   console.log(itemsName);
     res.render("about", {listTitle:"BookMarks",listdata:itemsName});
 
 }
+});
 });
 });
 
@@ -245,7 +246,8 @@ List.find({},function(err,lists){
 //Retriving all tags
 app.post("/getAllTags",function(req,res){
 List.find({},function(err,lists){
-  var tagsName = [];
+  var tagsName = ["Home"];
+
   if(err)
   {
 

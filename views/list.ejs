@@ -12,10 +12,7 @@
 </div>
 <div class="col-md-4">
 <div class="custom">
-<form action="/createList" method="post">
-<input type="text" name="newList" placeholder="Create new Folder" autocomplete="off">
-<button class="round" type="submit">+</button>
-</form>
+
 </div>
 </div>
 </div>
@@ -40,7 +37,7 @@
 <form action="/delete" method="post">
 <div class="item">
 <input type="checkbox" name ="checkbox" value="<%= item.id%>" onChange="this.form.submit()">
-<p class="todo"><%=  item.name  %></p>
+   <a style="color:#0e615c;"href="<%=item.name%>"><%= item.name %> </a><br>
 
 </div>
 <input type="hidden" name="listName" value="<%= listTitle %>">
@@ -54,7 +51,7 @@
 <div class="col-md-4">
 <div class="row">
 <div class="box" id="change">
-<h6> Select Tag or Folder </h>
+<h6> Select Tag </h>
 </div>
 </div>
 <div class="row">
@@ -65,8 +62,10 @@
  <% lists.forEach(function(list){ %>
    <form action="/deleteTag" method="post">
    <div class="item">
-   <input type="checkbox" name ="checkbox" value="<%= list.id%>" onChange="this.form.submit()">
- <a style="color:#0e615c;"href="/<%=list.name%>"> <%= list.name %> List</a><br>
+
+          <input type="checkbox" name ="checkbox" value="<%= list.id%>" onChange="this.form.submit()">
+<a style="color:#0e615c;"href="/<%=list.name%>"><%= list.name %> List</a><br>
+
  </div>
 <input type="hidden" name="listName" value="<%= listTitle %>">
    </form>
@@ -85,7 +84,7 @@
   <div class="custom">
   <form action="/createTag" method="post">
     <input type="text" name="newItem" placeholder="Book Mark Link" autocomplete="off">
-  <input type="text" name="newTag" placeholder="Separate Tags with commas" autocomplete="off" required>
+  <input type="text" name="newTag" placeholder="Separate Tags with commas" autocomplete="off" >
   <button class="round" type="submit">+</button>
   </form>
   </div>
