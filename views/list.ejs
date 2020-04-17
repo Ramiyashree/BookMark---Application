@@ -1,96 +1,73 @@
 <%- include("header") -%>
-
 <div class="row">
-<div class="col-md-2">
-<%#<img style="height:150px;width:150px;"class="panda-img" src="https://media.giphy.com/media/69xvnBKHRaNkdoZNWd/source.gif" alt="panda-img"></img>%>
-
-</div>
-<div class="col-md-6">
-<div class="box" id="heading">
-<h1> <%= listTitle %> </h1>
-</div>
-</div>
-<div class="col-md-4">
-<div class="custom">
-
-</div>
-</div>
-</div>
-
-
-<div class="row">
-<div class="col-md-2">
-  <form action="/getAllBookmarks" class="square" method="post">
-
-    <button    class="square" type="submit">All Bookmarks</button>
-  </form>
-<br><br>
-  <form class="square" action="/getAllTags" method="post">
-
-  <button  class="square" type="submit">All Tags</button>
-  </form><br /></br>
-</div>
-
-<div class="col-md-6">
-<div class="box">
-<% newListItems.forEach(function(item){ %>
-<form action="/delete" method="post">
-<div class="item">
-<input type="checkbox" name ="checkbox" value="<%= item.id%>" onChange="this.form.submit()">
-   <a style="color:#0e615c;"href="<%=item.name%>"><%= item.name %> </a><br>
-
-</div>
-<input type="hidden" name="listName" value="<%= listTitle %>">
-
-</form>
-<% }); %>
-
-
-</div>
-</div>
-<div class="col-md-4">
-<div class="row">
-<div class="box" id="change">
-<h6> Select Tag </h>
-</div>
-</div>
-<div class="row">
-<div class="list-nav">
-
-
-
- <% lists.forEach(function(list){ %>
-   <form action="/deleteTag" method="post">
-   <div class="item">
-
-          <input type="checkbox" name ="checkbox" value="<%= list.id%>" onChange="this.form.submit()">
-<a style="color:#0e615c;"href="/<%=list.name%>"><%= list.name %></a><br>
-
- </div>
-<input type="hidden" name="listName" value="<%= listTitle %>">
-   </form>
- <%});%>
-
-</div>
-</div>
-</div>
-</div>
-
-<div class="row">
-<div class="col-md-3">
-<input type="hidden" name="listName" value="<%= listTitle %>">
-</div>
+  <div class="col-md-2">
+  </div>
+  <div class="col-md-6">
+    <div class="box" id="heading">
+      <h1> <%= listTitle %> </h1>
+    </div>
+  </div>
   <div class="col-md-4">
-  <div class="custom">
-  <form action="/createTag" method="post">
-    <input type="text" name="newItem" placeholder="Book Mark Link" autocomplete="off">
-  <input type="text" name="newTag" placeholder="Separate Tags with commas" autocomplete="off" >
-  <button class="round" type="submit">+</button>
-  </form>
+    <div class="custom">
+    </div>
   </div>
-  </div>
-
 </div>
-
-
-<%- include("footer") -%>
+<div class="row">
+  <div class="col-md-2">
+    <form action="/getAllBookmarks" class="square" method="post">
+      <button    class="square" type="submit">All Bookmarks</button>
+    </form>
+    <br><br>
+    <form class="square" action="/getAllTags" method="post">
+      <button  class="square" type="submit">All Tags</button>
+    </form><br /></br>
+  </div>
+  <div class="col-md-6">
+    <div class="box">
+      <% newListItems.forEach(function(item){ %>
+        <form action="/delete" method="post">
+          <div class="item">
+            <input type="checkbox" name ="checkbox" value="<%= item.id%>" onChange="this.form.submit()">
+            <a style="color:#0e615c;"href="<%=item.name%>"><%= item.name %> </a><br>
+          </div>
+          <input type="hidden" name="listName" value="<%= listTitle %>">
+        </form>
+        <% }); %>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="row">
+        <div class="box" id="change">
+          <h6> Select Tag </h>
+          </div>
+        </div>
+        <div class="row">
+          <div class="list-nav">
+            <% lists.forEach(function(list){ %>
+              <form action="/deleteTag" method="post">
+                <div class="item">
+                  <input type="checkbox" name ="checkbox" value="<%= list.id%>" onChange="this.form.submit()">
+                  <a style="color:#0e615c;"href="/<%=list.name%>"><%= list.name %></a><br>
+                </div>
+                <input type="hidden" name="listName" value="<%= listTitle %>">
+              </form>
+              <%});%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <input type="hidden" name="listName" value="<%= listTitle %>">
+        </div>
+        <div class="col-md-4">
+          <div class="custom">
+            <form action="/createTag" method="post">
+              <input type="text" name="newItem" placeholder="Book Mark Link" autocomplete="off">
+              <input type="text" name="newTag" placeholder="Separate Tags with commas" autocomplete="off" >
+              <button class="round" type="submit">+</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <%- include("footer") -%>
