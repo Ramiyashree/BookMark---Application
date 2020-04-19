@@ -12,9 +12,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-//mongoose.connect("mongodb://localhost:27017/bookmarkintern", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/bookmarkintern", {useNewUrlParser: true});
 
-mongoose.connect("mongodb+srv://admin-ramiya:Test123@cluster0-xdeqa.mongodb.net/bookmarkintern", {useNewUrlParser: true});
+//mongoose.connect("mongodb+srv://admin-ramiya:Test123@cluster0-xdeqa.mongodb.net/bookmarkintern", {useNewUrlParser: true});
+
 
 const itemsSchema = {
   name: String
@@ -46,9 +47,9 @@ const listSchema = {
   name: String,
   items: [itemsSchema]
 };
-
+var alert = '';
 const List = mongoose.model("List",listSchema);
-
+var alertMessage = " ";
 //INITIAL HOME PAGE WITH THE DEFAULT BOOKMARKS
 app.get("/", function(req, res) {
   List.find({},function(err,lists){
@@ -65,12 +66,12 @@ app.get("/", function(req, res) {
         res.redirect("/");
       }
       else{
-        res.render("list", {listTitle: "Home Page", newListItems: items, lists: lists});
+        res.render("list", {listTitle: "Home Page", newListItems: items, lists: lists , alert:alertMessage, alert:alert});
       }
     });
   });
-
 });
+
 
 // SPECIFIC TAG WITH THEIR BOOKMARKS PAGE IS RETRIVED
 app.get("/:customListName", function(req, res){
@@ -82,7 +83,7 @@ app.get("/:customListName", function(req, res){
           res.redirect("/"+ customListName);
         }
         else{
-          res.render("list",{listTitle: foundItemsofList.name , newListItems: foundItemsofList.items,lists:lists});
+          res.render("list",{listTitle: foundItemsofList.name , newListItems: foundItemsofList.items,lists:lists, alert: ''});
         }
       }
       else{
@@ -101,21 +102,31 @@ app.post("/createTag",function(req,res){
   });
   if(tagName.length == 0) //WHEN TO TAGS ARE SEPCIFIED
   {
+      alert = "";
     Item.findOne({name:itemName}, function(err,lists){
       if(!err){
         if(!lists){
           List.find({"items.name":itemName}, function(err,listsname){
-              if(listsname.length==0){
-          item.save();
+            if(listsname.length==0){
+              item.save();
+            }
+            else{
+          alert = "Already bookmarked";
+            }
+          });
         }
-      });
+        else{
+      alert = "Already bookmarked";
+        }
+
+
       }
-    }
       res.redirect("/");
     });
   }
   else{ //WHEN MULTIPLE TAGS ARE SPECIFIED
     var string = tagName.split(",");
+      alert = "";
     string.forEach(elements => {
       List.findOne({name: elements} , function(err, foundList){
         if(!err){
@@ -127,27 +138,35 @@ app.post("/createTag",function(req,res){
             list.save();
           }
           else{
+              alert = "";
             List.find({"items.name":itemName}, function(err,lists){ //IF THE TAG IS ALREADY EXISTING WE CHECK WHETHER THS BOOKMARK IS ALREADY PRESENT TO AVOID DUPLICATE COPY
               if(!err)
-              {    if(lists.length == 0){
+              {
+                if(lists.length == 0){
                   Item.findOne({name:itemName}, function(err,lists){
-                if(!lists){
-                foundList.items.push(item);
-                foundList.save();
+                    if(!lists){
+                      foundList.items.push(item);
+                      foundList.save();
+                    }
+                    else{
+                  alert = "Already bookmarked";
+                    }
+                  });
+                }
+                else{
+              alert = "Already bookmarked";
+                }
               }
             });
-        }
+          }
+      }
+      else{
+        console.log(err)
       }
     });
-          }
-        }
-        else{
-          console.log(err)
-        }
-      });
-    });
-    res.redirect("/");
-  }
+  });
+  res.redirect("/");
+}
 });
 
 //RETRIVING ALL BOOKMARKS FROM THE DEFAULT AND FROM TAGS
